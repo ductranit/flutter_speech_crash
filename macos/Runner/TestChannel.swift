@@ -1,9 +1,5 @@
 
-#if os(iOS)
-  import Flutter
-#elseif os(macOS)
-  import FlutterMacOS
-#endif
+import FlutterMacOS
 import Foundation
 import AVFoundation
 import Speech
@@ -13,11 +9,7 @@ class TestChannel: NSObject, FlutterStreamHandler, FlutterPlugin {
     static let shared: TestChannel = TestChannel()
     
     public static func register(with registrar: FlutterPluginRegistrar) {
-#if os(iOS)
-        let messenger = registrar.messenger()
-#elseif os(macOS)
         let messenger = registrar.messenger
-#endif
         
         let channel = FlutterMethodChannel(
             name: "test_channel",
@@ -37,17 +29,9 @@ class TestChannel: NSObject, FlutterStreamHandler, FlutterPlugin {
         }
     
     public func authorize(flutterResult: @escaping FlutterResult) {
-           #if os(iOS)
-           AVAudioSession.sharedInstance().requestRecordPermission { granted in
-             //OperationQueue.main.addOperation {
-               flutterResult(granted)
-             //}
-           }
-           #elseif os(macOS)
         SFSpeechRecognizer.requestAuthorization { status in
                
             }
-           #endif
        }
         
     func onListen(withArguments arguments: Any?, eventSink events: @escaping FlutterEventSink) -> FlutterError? {
